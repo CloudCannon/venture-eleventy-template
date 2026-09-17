@@ -82,6 +82,10 @@ updating alongside any change to the components or data files.
 
 ## Development
 
+**Requires Node.js 22 or newer.** Eleventy Image v7 is ESM-only and sets the floor at Node 22;
+Sass and Sharp need 20.19+ and 20.9+ respectively. CloudCannon builds this template on Node 24
+(set in `.cloudcannon/initial-site-settings.json`), so matching that locally is the safest bet.
+
 1. Run `npm i` to install the modules.
 2. Run `npm run start` to build and watch the site.
 
@@ -95,6 +99,45 @@ By default the site's output files are hosted at `http://localhost:8080`
 2. Run `npm run build` to build the site.
 
 This will create a `_site` folder, containing the output files.
+
+## Editing Locally with CloudCannon
+
+Run CloudCannon against your local files with the [CloudCannon CLI](https://cloudcannon.com/documentation/developer-reference/cli/)
+dev server. This is the fastest way to iterate on `cloudcannon.config.yml`, inputs, and structures —
+you see the editing experience without committing and pushing first.
+
+1. Install the CLI and log in (requires Node.js 24+):
+
+   ```bash
+   npm install --global @cloudcannon/cli
+   cloudcannon login
+   ```
+
+2. Build the site, so the dev server has output to serve:
+
+   ```bash
+   npm run build
+   ```
+
+3. Start CloudCannon locally, pointing it at the build output:
+
+   ```bash
+   cloudcannon dev _site
+   ```
+
+The dev server runs on port `10101` by default and opens CloudCannon in your browser, pointed at the
+files in this repo. Content edits sync to disk as you make them; re-run the build after changing
+components or templates to refresh the preview.
+
+Before you commit configuration changes, validate them:
+
+```bash
+cloudcannon validate
+```
+
+The dev server is a development tool only — editors never access it. See
+[Build your editing experience locally](https://cloudcannon.com/blog/build-your-editing-experience-locally-with-the-cloudcannon-dev-server/)
+for the full workflow.
 
 ## Components
 
