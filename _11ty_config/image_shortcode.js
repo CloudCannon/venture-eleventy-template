@@ -1,6 +1,10 @@
 const path = require("node:path");
 const fs = require("fs");
-const Image = require("@11ty/eleventy-img");
+// Eleventy Image v7 is ESM-only. Under `require(esm)` this resolves to the
+// module namespace, so the callable queue function is the `default` export --
+// `require(...)` itself is no longer callable, and the `Image` named export is
+// the class, not the queue function.
+const { default: eleventyImage, generateHTML } = require("@11ty/eleventy-img");
 
 const IMAGE_OPTIONS = {
 	widths: [400, 800, 1280, 1600],
@@ -31,7 +35,7 @@ module.exports = async (srcFilePath, alt, className, sizes, preferSvg, propSrc, 
 		: {};
 
 	if (fs.existsSync(inputFilePath)) {
-		let metadata = await Image(
+		let metadata = await eleventyImage(
 			inputFilePath,
 			Object.assign(
 				{
@@ -42,7 +46,7 @@ module.exports = async (srcFilePath, alt, className, sizes, preferSvg, propSrc, 
 		);
 		console.log(`[11ty/eleventy-img] ${Date.now() - before}ms: ${inputFilePath}`);
 
-		return Image.generateHTML(metadata, {
+		return generateHTML(metadata, {
 			alt,
 			class: className,
 			sizes: sizes || "100vw", // Set default value to "100vw" if sizes is not provided
