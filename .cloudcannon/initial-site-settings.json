@@ -6,7 +6,7 @@
 		"build_command": "npm run build",
 		"output_path": "_site",
 		"environment_variables": [],
-		"preserved_paths": "node_modules/,_site/,css/",
+		"preserved_paths": "node_modules/,_site/optimized/",
 		"preserve_output": true,
 		"include_git": false,
 		"manually_configure_urls": true,

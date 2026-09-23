@@ -2,6 +2,20 @@
 	"name": "venture-eleventy-template",
 	"version": "1.0.0",
 	"description": "Venture is a polished, marketing website template for Eleventy.",
+	"keywords": [
+		"eleventy",
+		"11ty",
+		"eleventy-template",
+		"eleventy-theme",
+		"small-business",
+		"business-website",
+		"marketing-site",
+		"landing-page",
+		"cms",
+		"cloudcannon",
+		"visual-editor",
+		"static-site-generator"
+	],
 	"scripts": {
 		"fetch-theme-variables": "node ./utils/fetch-theme-variables.js",
 		"component-styles": "node ./utils/build-component-styles.js",
