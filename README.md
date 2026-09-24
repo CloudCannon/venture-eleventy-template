@@ -2,7 +2,7 @@
 
 Venture is a polished, marketing website template for Eleventy. Browse through a [live demo](https://spiky-polar.cloudvent.net).
 
-![Small business template screenshot](/src/assets/images/_screenshot.png)
+![Venture template screenshot](.github/screenshot.jpg)
 
 [![Deploy to CloudCannon](https://buttons.cloudcannon.com/deploy.svg)](https://app.cloudcannon.com/register/#sites/connect/github/cloudcannon/venture-eleventy-template)
 
@@ -21,7 +21,9 @@ Venture is a polished, marketing website template for Eleventy. Browse through a
 
 ## Editing
 
-Venture is set up for adding, updating and removing pages, components, posts, navigation and footer elements in [CloudCannon](https://app.cloudcannon.com/).
+Venture is set up for adding, updating and removing pages, components, navigation and footer elements in [CloudCannon](https://app.cloudcannon.com/).
+
+There is no blog or posts collection — Venture is a marketing site template, not a publishing one.
 
 Changes in the data files require the site to be rebuilt to see your changes.
 
@@ -82,6 +84,10 @@ updating alongside any change to the components or data files.
 
 ## Development
 
+**Requires Node.js 22 or newer.** Eleventy Image v7 is ESM-only and sets the floor at Node 22;
+Sass and Sharp need 20.19+ and 20.9+ respectively. CloudCannon builds this template on Node 24
+(set in `.cloudcannon/initial-site-settings.json`), so matching that locally is the safest bet.
+
 1. Run `npm i` to install the modules.
 2. Run `npm run start` to build and watch the site.
 
@@ -95,6 +101,45 @@ By default the site's output files are hosted at `http://localhost:8080`
 2. Run `npm run build` to build the site.
 
 This will create a `_site` folder, containing the output files.
+
+## Editing Locally with CloudCannon
+
+Run CloudCannon against your local files with the [CloudCannon CLI](https://cloudcannon.com/documentation/developer-reference/cli/)
+dev server. This is the fastest way to iterate on `cloudcannon.config.yml`, inputs, and structures —
+you see the editing experience without committing and pushing first.
+
+1. Install the CLI and log in (requires Node.js 24+):
+
+   ```bash
+   npm install --global @cloudcannon/cli
+   cloudcannon login
+   ```
+
+2. Build the site, so the dev server has output to serve:
+
+   ```bash
+   npm run build
+   ```
+
+3. Start CloudCannon locally, pointing it at the build output:
+
+   ```bash
+   cloudcannon dev _site
+   ```
+
+The dev server runs on port `10101` by default and opens CloudCannon in your browser, pointed at the
+files in this repo. Content edits sync to disk as you make them; re-run the build after changing
+components or templates to refresh the preview.
+
+Before you commit configuration changes, validate them:
+
+```bash
+cloudcannon validate
+```
+
+The dev server is a development tool only — editors never access it. See
+[Build your editing experience locally](https://cloudcannon.com/blog/build-your-editing-experience-locally-with-the-cloudcannon-dev-server/)
+for the full workflow.
 
 ## Components
 
@@ -163,17 +208,16 @@ The "Form" component has validation and error messages build in.
 
 The site uses the [eleventy image plugin](https://www.11ty.dev/docs/plugins/image/) to optimize your images.
 
-To keep build times short you can set preserved paths for your image optimizations by setting preserved paths following the instructions below:
+Image caching is already configured: `.cloudcannon/initial-site-settings.json` ships with the
+preserved paths set to `node_modules/,_site/optimized/`, so a new site only re-optimizes images that
+have actually changed. You do not need to set this up by hand.
 
-1. Within your site on CloudCannon navigate to Site Settings (found at the bottom of the site sidebar)
+If you are connecting an existing site and want to check it, go to *Site Settings* → *Configuration*
+→ *Caching options* and confirm `node_modules/,_site/optimized/` is listed.
 
-2. Navigate to the configuration tab
-
-3. Open "caching options"
-
-4. Add `node_modules/,_site/optimized/` to the preserved paths section
-
-This will mean that only new/updated images get optimized on build.
+Source photography is kept at 1600px wide, which is the largest size `eleventy-img` generates —
+anything larger is discarded at build time and only slows the first build down. Resize your own
+images before committing them.
 
 See [this blog](https://cloudcannon.com/blog/automatically-optimize-your-images-with-eleventy-image-and-cloudcannon/) for more on optimizing images with Eleventy and CloudCannon.
 
@@ -204,11 +248,15 @@ All blocks have an id field that can be set and then used as a link to that comp
 
 This is helpful (for example) if you want to link to information about your services from the nav without having a fully seperate page for it. You can set the id field in the services block to be `services` and then in *Data* / *Nav* you can have a link to `#services`.
 
-## Development
-
 ### Prebuild
 
 There is a prebuild step with this template to process the user-defined theme variables (such as `color_groups` or `fonts`, defined in `src/_data/theme.yml`) and create associated CSS variables. The file which does this processing is located at `utils/fetch-theme-variables.js`.
 
 When developing locally, you can run `$ npm run fetch-theme-variables` to execute the preprocessing.
 This command runs automatically as part of `$ npm run start` and `$ npm run build`.
+
+## Photography
+
+Demo photography is from [Unsplash](https://unsplash.com) and listed in
+[`src/assets/images/CREDITS.md`](src/assets/images/CREDITS.md). Replace it with your own before
+launching — it is placeholder content, not a licence to reuse.
